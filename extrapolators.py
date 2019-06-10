@@ -22,15 +22,12 @@ def fill_where_three_nones(line):
     certain_positions = set()
 
     if value_blank_blank >= 0:
-        print("Found", value_blank_blank)
         uncertain_nones = [value_blank_blank + 1, value_blank_blank + 2]
         certain_positions.add(_get_certain_position(line, uncertain_nones))
     if blank_value_blank >= 0:
-        print("Found", blank_value_blank)
         uncertain_nones = [blank_value_blank, blank_value_blank + 2]
         certain_positions.add(_get_certain_position(line, uncertain_nones))
     if blank_blank_value >= 0:
-        print("Found", blank_blank_value)
         uncertain_nones = [blank_blank_value, blank_blank_value + 1]
         certain_positions.add(_get_certain_position(line, uncertain_nones))
 
