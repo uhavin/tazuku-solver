@@ -1,62 +1,62 @@
-from helpers import _stringify
+from helpers import stringify
 
 
-def fill_certain_zeros(line):
+def fill_where_three_nones(line):
+    if line.count(None) != 3:
+        return
     half = len(line) / 2
-    if line.count(1) != half - 1:
-        return
-    if line.count(0) != half - 2:
+
+    if line.count(0) == half - 2:
+        fill_value = 0
+    elif line.count(1) == half - 2:
+        fill_value = 1
+    else:
         return
 
-    line_str = _stringify(line)
-    one_blank_blank = line_str.find("0__")
-    blank_one_blank = line_str.find("_0_")
-    blank_blank_one = line_str.find("__0")
+    line_str = stringify(line)
+    value_blank_blank = line_str.find(f"{fill_value}__")
+    blank_value_blank = line_str.find(f"_{fill_value}_")
+    blank_blank_value = line_str.find(f"__{fill_value}")
 
     uncertain_nones = None
-    certain_positions = []
+    certain_positions = set()
 
-    if one_blank_blank >= 0:
-        uncertain_nones = [one_blank_blank + 1, one_blank_blank + 2]
-        certain_positions.append(_get_certain_position(line, uncertain_nones))
-    if blank_one_blank >= 0:
-        uncertain_nones = [blank_one_blank, blank_one_blank + 2]
-        certain_positions.append(_get_certain_position(line, uncertain_nones))
-    if blank_blank_one >= 0:
-        uncertain_nones = [blank_blank_one, blank_blank_one + 1]
-        certain_positions.append(_get_certain_position(line, uncertain_nones))
+    if value_blank_blank >= 0:
+        print("Found", value_blank_blank)
+        uncertain_nones = [value_blank_blank + 1, value_blank_blank + 2]
+        certain_positions.add(_get_certain_position(line, uncertain_nones))
+    if blank_value_blank >= 0:
+        print("Found", blank_value_blank)
+        uncertain_nones = [blank_value_blank, blank_value_blank + 2]
+        certain_positions.add(_get_certain_position(line, uncertain_nones))
+    if blank_blank_value >= 0:
+        print("Found", blank_blank_value)
+        uncertain_nones = [blank_blank_value, blank_blank_value + 1]
+        certain_positions.add(_get_certain_position(line, uncertain_nones))
 
     for i in certain_positions:
-        line[i] = 0
+        line[i] = fill_value
 
 
-def fill_certain_ones(line):
+def fill_where_four_nones(line):
+    if line.count(None) != 4:
+        return
     half = len(line) / 2
-    if line.count(0) != half - 1:
+    if line.count(0) == half - 1:
+        fill_value = 1
+    elif line.count(1) == half - 1:
+        fill_value = 0
+    else:
         return
-    if line.count(1) != half - 2:
+    line_str = stringify(line)
+    gap_of_four = line_str.find("____")
+    if gap_of_four == -1:
         return
 
-    line_str = _stringify(line)
-    one_blank_blank = line_str.find("1__")
-    blank_one_blank = line_str.find("_1_")
-    blank_blank_one = line_str.find("__1")
-
-    uncertain_nones = None
-    certain_positions = []
-
-    if one_blank_blank >= 0:
-        uncertain_nones = [one_blank_blank + 1, one_blank_blank + 2]
-        certain_positions.append(_get_certain_position(line, uncertain_nones))
-    if blank_one_blank >= 0:
-        uncertain_nones = [blank_one_blank, blank_one_blank + 2]
-        certain_positions.append(_get_certain_position(line, uncertain_nones))
-    if blank_blank_one >= 0:
-        uncertain_nones = [blank_blank_one, blank_blank_one + 1]
-        certain_positions.append(_get_certain_position(line, uncertain_nones))
+    certain_positions = [gap_of_four, gap_of_four + 3]
 
     for i in certain_positions:
-        line[i] = 1
+        line[i] = fill_value
 
 
 def _get_certain_position(line, uncertain_nones):
