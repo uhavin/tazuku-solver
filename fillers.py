@@ -54,8 +54,6 @@ def fill_right_of_double(line):
 
         if value is None:
             continue
-        # if fill_position >= len(line):
-        #     continue
         if compare_position >= len(line):
             continue
         if line[position] != line[compare_position]:
